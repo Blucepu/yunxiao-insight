@@ -1,0 +1,35 @@
+{
+  "organizationId": "607e49a035f5934d3af8d82b",
+  "apiBaseUrl": "https://openapi-rdc.aliyuncs.com",
+  "cacheTtlMinutes": 5,
+  "staleDays": 14,
+  "trendWeeks": 12,
+  "recentDays": 30,
+  "categories": [
+    "Req",
+    "Bug",
+    "Task",
+    "Risk"
+  ],
+  "excludeProjects": [
+    "测试项目"
+  ],
+  "projectAliases": {
+    "apm-im": "APM_IM"
+  },
+  "stageGroups": {
+    "1": "todo",
+    "2": "doing",
+    "3": "verify",
+    "4": "done",
+    "5": "canceled",
+    "6": "todo",
+    "7": "doing",
+    "11": "doing",
+    "12": "doing"
+  },
+  "statusGroups": {
+    "无法重现": "canceled"
+  },
+  "workitemUrlTemplate": "https://devops.aliyun.com/projex/project/{spaceId}/{categoryPath}/{id}"
+}
