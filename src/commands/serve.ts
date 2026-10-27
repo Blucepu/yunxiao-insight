@@ -57,11 +57,10 @@ export async function runServe(flags: Record<string, string | boolean>): Promise
   setQuiet(boolFlag(flags, "quiet"));
   const runtime = loadRuntime();
   const dist = webDistDir(runtime.root);
-  if (!existsSync(join(dist, "index.html"))) {
-    throw new Error(
-      `[yunxiao-insight] 找不到 ${dist}/index.html\n` +
-        "  请先在 yunxiao-search 仓库运行 bun run build 构建页面",
-    );
+  // 页面产物缺失只影响静态托管，/api 实时数据不受影响（页面可跑在 vite dev 或 OSS 上）
+  const hasDist = existsSync(join(dist, "index.html"));
+  if (!hasDist) {
+    log(`未找到 ${dist}/index.html，仅提供 /api 数据接口（静态页面请在 yunxiao-search 运行 bun run build）`);
   }
   const port = numFlag(flags, "port", 4173);
   // 默认绑定所有网卡（局域网服务）；--host 127.0.0.1 可收回仅本机
@@ -118,7 +117,10 @@ export async function runServe(flags: Record<string, string | boolean>): Promise
         }
       }
 
-      // 静态资源：页面构建产物，找不到的路径回退 index.html（SPA）
+      // 静态资源：页面构建产物，找不到的路径回退 index.html（SPA）；产物缺失时 404
+      if (!hasDist) {
+        return Response.json({ error: "页面产物不存在，仅提供 /api 数据接口" }, { status: 404 });
+      }
       const path = normalize(decodeURIComponent(url.pathname)).replace(/^([/\\])+/, "");
       let file = join(dist, path);
       if (!file.startsWith(dist + sep) && file !== dist) {
@@ -141,7 +143,7 @@ export async function runServe(flags: Record<string, string | boolean>): Promise
   for (const address of lanAddresses()) {
     console.log(`  · 局域网：http://${address}:${server.port}   ← 分享给同事`);
   }
-  console.log(`  · 页面目录：${dist}`);
+  if (hasDist) console.log(`  · 页面目录：${dist}`);
   console.log(`  · 轮询走 1 分钟内存缓存 + 5 分钟快照 TTL；页面「刷新」按钮直达云效（?refresh=1）`);
   console.log("  · Ctrl+C 停止；对外分享：把页面 dist/ 整目录传 OSS，sync 会同步刷新其中的 data.json");
 
