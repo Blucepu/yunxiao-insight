@@ -1,0 +1,24 @@
+{
+  "name": "yunxiao-insight",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "云效工作项全局搜索 CLI：单文件搜索 + 数据表格页面，可离线打开、可部署 OSS",
+  "bin": {
+    "yunxiao-insight": "./src/cli.ts"
+  },
+  "scripts": {
+    "serve": "bun run src/cli.ts serve",
+    "sync": "bun run src/cli.ts sync",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check-types": "tsc --noEmit",
+    "check": "bun run check-types && bun run test"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.4",
+    "@types/node": "^22",
+    "typescript": "^5.7",
+    "vitest": "^2.1"
+  }
+}

@@ -1,0 +1,22 @@
+# 依赖
+node_modules/
+
+# 本地环境（含云效 token，绝不可提交）
+.env
+.env.local
+.env.*.local
+
+# 本地缓存
+data/
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+*.log
+
+# 本地运行配置（含 organizationId 等内部信息，示例见 config.example.json）
+config.json
+
+# OpenCode 工具目录
+.opencode/
